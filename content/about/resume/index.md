@@ -122,15 +122,27 @@ layoutBackgroundHeaderSpace: false
   </thead>
   <tbody>
     <tr>
+      <td><img class="customEntitityLogo" src="img/logo_zephyr.png"/></td>
+      <td><a href="https://github.com/zephyrproject-rtos/zephyr" target="_blank">Zephyr RTOS</a></td>
+      <td>Nordic nRF driver fixes <br> and modern Clang compatibility</td>
+      <td>2026</td>
+    </tr>
+    <tr>
+      <td><img class="customEntitityLogo" src="img/logo_nordic.png"/></td>
+      <td><a href="https://github.com/nordicsemi/nrfx" target="_blank">Nordic nrfx drivers</a></td>
+      <td>Modern Clang compatibility</td>
+      <td>2025</td>
+    </tr>
+    <tr>
       <td><img class="customEntitityLogo" src="img/logo_mynewt.png"/></td>
       <td><a href="https://github.com/apache/mynewt-nimble" target="_blank">Apache myNewt nimBLE</a></td>
-      <td>Bugfixes in FreeRTOS port <br>& compatibility with clang compiler</td>
+      <td>Fixes in FreeRTOS port <br>& compatibility with Clang compiler</td>
       <td>2025</td>
     </tr>
     <tr>
       <td><img class="customEntitityLogo" src="img/logo_python.png"/></td>
       <td><a href="https://github.com/rnag/dataclass-wizard" target="_blank">dataclass-wizard</a></td>
-      <td>Bugfix for timezone parsing <br>in Python 3.9+</td>
+      <td>Fix for timezone parsing <br>in Python 3.9+</td>
       <td>2024</td>
     </tr>
   </tbody>
