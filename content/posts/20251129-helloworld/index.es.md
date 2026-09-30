@@ -12,19 +12,19 @@ draft: false
 *«El principio es la parte más importante de la obra.»* — Platón
 {{< /lead >}}
 
-Hace unos días, mientras escribía el post de presentación de este blog — que titulé "Hello World" (¡échole un vistazo si aún no lo has hecho!) — empecé a pensar en esta pequeña tradición. Recordé haber leído algo sobre su origen hace tiempo, así que me pareció un buen tema para la primera entrada... ¿o la segunda? En fin, da igual, me parecía el tema perfecto para empezar.
+Hace unos días, mientras escribía el post de presentación del blog — que titulé "Hello World" (¡échale un vistazo si aún no lo has hecho!) — empecé a pensar en esta pequeña tradición. Recordé haber leído algo sobre su origen hace tiempo, así que me pareció un buen tema para la primera entrada... ¿o la segunda? En fin, da igual, me parecía el tema perfecto para empezar.
 
 {{< article link="/posts/20251128-intro/" showSummary=true compactSummary=true >}}
 
 ## ¿Qué es "Hello World"?
 
-Cuando alguien empieza a aprender programación, lo primero que suele escribir es un programa llamado **“Hello World”**. Es un trocito de código cuyo único objetivo es mostrar un texto en la pantalla. Nada del otro mundo, nada complejo — simplemente una confirmación de que todo funciona: el compilador, el editor, el entorno y, por supuesto, el programador.
+Cuando alguien empieza a aprender programación, lo primero que suele escribir es un programa llamado **“Hello World”**. Es un trocito de código cuyo único objetivo es mostrar un texto por pantalla. Nada del otro mundo, nada complejo — simplemente una confirmación de que todo funciona: el compilador, el editor, el entorno y, por supuesto, el programador.
 
 Un Hello World no es más que decir: *“Vale, estoy aquí. Empecemos.”*
 
 ## Cómo se ve
 
-En la mayoría de lenguajes de alto nivel, imprimir texto es extremadamente sencillo. Por ejemplo, en *Python*:
+En la mayoría de lenguajes de alto nivel, imprimir texto por pantalla es extremadamente sencillo. Por ejemplo, en *Python*:
 
 ```py
 print("Hello, World!")
@@ -91,7 +91,7 @@ int main(void) {
 }
 ```
 
-Este pequeño LED parpadeante es la versión del desarrollador embebido de mostrat "Hello, World!". Es la primera confirmación de que el hardware, la toolchain y la configuración del firmware están todos correctos.
+Este pequeño LED parpadeante es la versión del desarrollador embebido de mostrat "Hello, World!". Es la primera confirmación de que el hardware, la toolchain y la configuración del firmware están funcionando correctamente.
 
 ## A Simple Beginning
 
