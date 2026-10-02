@@ -8,7 +8,8 @@ title = "Shunya"
   isoCode = "en"
   rtl = false
   dateFormat = "2 January 2006"
-  logo = "img/shunya_logo_no_bg.png"
+  logo = "img/shunya_logo_white_small.png"
+  secondaryLogo = "img/shunya_logo_black_small.png"
   description = "Shunya's blog"
 
 [params.author]

@@ -9,6 +9,7 @@ title = "Shunya"
   rtl = false
   dateFormat = "2 January 2006"
   logo = "img/shunya_logo_no_bg.png"
+  secondaryLogo = "img/shunya_logo_no_bg_black.png"
   description = "Shunya's blog"
 
 [params.author]

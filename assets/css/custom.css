@@ -1,3 +1,9 @@
+/* Slightly darken the light theme's "white" surfaces (body, header, cards, etc.)
+   so background images don't wash out against pure white. Dark mode is untouched. */
+:root:not(.dark) {
+    --color-neutral: 150, 155, 202;
+}
+
 @media screen and (min-width: 0px) {
     .customEntitityLogo {
         background-color: rgb(255, 255, 255);
