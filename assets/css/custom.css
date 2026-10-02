@@ -1,7 +1,19 @@
 /* Slightly darken the light theme's "white" surfaces (body, header, cards, etc.)
    so background images don't wash out against pure white. Dark mode is untouched. */
 :root:not(.dark) {
-    --color-neutral: 150, 155, 202;
+    --color-neutral: 222, 222, 222;
+}
+
+/* Homepage "Recent" article cards: a bit darker than the page background in light
+   mode, a bit lighter in dark mode, with a slight frosted-glass blur/transparency. */
+.home-card-bg {
+    background-color: rgba(138, 138, 138, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+:root.dark .home-card-bg {
+    background-color: rgba(71, 85, 105, 0.25);
 }
 
 @media screen and (min-width: 0px) {
