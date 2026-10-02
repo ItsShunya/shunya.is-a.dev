@@ -6,7 +6,7 @@ categories: [Embedded]
 tags: ["Programming Languages", C, ABI]
 series: ["Enums in C"]
 series_order: 1
-date: 2026-07-31
+date: 2026-07-15
 draft: false
 ---
 

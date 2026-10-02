@@ -1,12 +1,12 @@
 ---
-title: "Packed enums or -fshort-enums?"
+title: "Packed enums vs -fshort-enums"
 summary: "Same rule, different scope: why shrinking one enum in its header beats shrinking every enum from the command line."
 description: "Packed enums vs -fshort-enums in C: how GCC and Clang shrink enums, where the attribute goes, the traps on Arm Cortex-M, and what C23 does better."
 categories: [Embedded]
 tags: ["Programming Languages", C, ABI, GCC]
 series: ["Enums in C"]
 series_order: 2
-date: 2026-08-31
+date: 2026-07-31
 draft: false
 ---
 
@@ -14,9 +14,9 @@ draft: false
 *«I have made this letter longer than usual, only because I have not had the time to make it shorter.»* — Blaise Pascal
 {{< /lead >}}
 
-In the [previous post](/posts/20260831-enum_storage/), we saw that `-fshort-enums` tells GCC and Clang to give every enum the smallest type that fits, and I promised packed enums their own post.
+In the [previous post](/posts/20260715-enum_storage/), we saw that `-fshort-enums` tells GCC and Clang to give every enum the smallest type that fits, and I promised packed enums their own post.
 
-{{< article link="/posts/20260831-enum_storage/" showSummary=true compactSummary=true >}}
+{{< article link="/posts/20260715-enum_storage/" showSummary=true compactSummary=true >}}
 
 `__attribute__((packed))` does the same thing for a single enum, and GCC's manual says the two are equivalent:
 
