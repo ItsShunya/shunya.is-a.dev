@@ -5,7 +5,7 @@ description: "How I flashed ESPHome on my two Xiaomi Mi Bedside Lamp 2 (MJCTD02Y
 categories: [Home Automation]
 tags: [ESPHome, Home Assistant, ESP32]
 date: 2026-11-22
-draft: true
+draft: false
 ---
 
 I have two Xiaomi Mi Bedside Lamp 2 in my bedroom, one on each side of the bed. They are nice
@@ -14,17 +14,13 @@ If the cloud or my internet is down, I can't control them. And I don't really li
 bedroom talking all the time to a server I don't control.
 
 Some years ago you could enable "LAN control" and add the lamp to Home Assistant with the Yeelight
-integration, but Xiaomi removed this option with a firmware update in 2021. So I wanted my lamps to
-work only locally with Home Assistant, like the rest of my house.
+integration, but Xiaomi removed this option with a firmware update in 2021. So I wanted my lamps to work only locally with Home Assistant, like the rest of my house.
 
 The good news is that there is an ESP32 inside the lamp, so you can replace the firmware with
 [ESPHome](https://esphome.io). The hardware is not trivial (the LED driving, the touch panel on
 the front, a single core ESP32 with a wrong checksum in its eFuses...), but mmakaay already did
 all the reverse engineering in the
-[esphome-xiaomi_bslamp2](https://github.com/mmakaay/esphome-xiaomi_bslamp2) project. It gives you
-ESPHome components and ready to use config packages for the lamp, so you only need to write a
-small YAML file. Everything works like with the original firmware: RGB and white light, the night
-light, and the buttons and slider on the front, which you can also use in your Home Assistant
+[esphome-xiaomi_bslamp2](https://github.com/mmakaay/esphome-xiaomi_bslamp2) project. Everything works like with the original firmware: RGB and white light, the night light, and the buttons and slider on the front, which you can also use in your Home Assistant
 automations. And the lamp doesn't talk to the Xiaomi cloud anymore.
 
 In this post I write all the steps I did, including the things that went wrong, because for the
@@ -32,18 +28,16 @@ first lamp not everything worked on first try. The second lamp took me maybe 30 
 
 My setup is a desktop with NixOS, but except the Nix parts the steps are the same on any Linux.
 
-![TODO: photo of the two lamps](images/blog/00-lamps.jpg)
+![photo of the two lamps](img/img_lamp.jpg)
 
 
 ## What you need
 
 - The lamp (model MJCTD02YL)
 - A USB to serial adapter that can do **3.3V**. I used a cheap CP2102 board
-- A USB cable **that can transfer data** (more about this later...)
+- A USB cable **that can transfer data**
 - Soldering iron and wires (I used dupont wires and cut one end)
 - T8 torx to open the lamp
-
-![TODO: photo of the tools and the CP2102 adapter](images/blog/01-tools.jpg)
 
 
 ## Step 1: Get the project and the tools
@@ -89,10 +83,9 @@ If you are not on NixOS, you can install ESPHome and esptool with `pip` or your 
 
 ## Step 2: Write the configuration
 
-I made a folder `my-lamp/` inside the repo for my own files, with a `.gitignore` that contains
-only `*`. Like this my Wi-Fi password never goes to git by accident.
+I made a folder `my-lamp/` inside the repo for my own files.
 
-First the `my-lamp/secrets.yaml`:
+First let's create the `my-lamp/secrets.yaml`:
 
 ```yaml
 # Only 2.4 GHz networks work, the lamp has no 5 GHz
@@ -104,8 +97,7 @@ api_encryption_key: "<output of: openssl rand -base64 32>"
 ota_password: "<some random password>"
 ```
 
-Then the config of the lamp. I copied `example.yaml` from the repo and changed only the name and
-the package version. This is `my-lamp/bedside-lamp-left.yaml` (without the comments):
+Then the config of the lamp. I simply copied `example.yaml` from the repo and changed only the name and the package version. This is `my-lamp/bedside-lamp-left.yaml` (without the comments):
 
 ```yaml
 substitutions:
@@ -141,12 +133,9 @@ For the other lamp I have the same file with `bedside-lamp-right` and `Bedside L
 use the same secrets.
 
 If you have more than one lamp, you don't need left/right names. I only did it to know which one
-is which. Just make sure every lamp has a different `name`, because it is also its hostname on the
-network. If you prefer one file for all your lamps, add `name_add_mac_suffix: true` under
-`esphome:` and ESPHome adds a part of the MAC address to the name.
+is which in HA and in the network. If you prefer one file for all your lamps, add `name_add_mac_suffix: true` under `esphome:` and ESPHome adds a part of the MAC address to the name.
 
-**Tip:** if you use separate files, don't call both `bedside-lamp.yaml` like I did. I overwrote the
-config of my first lamp with the second one and had to write it again.
+**Tip:** if you use separate files, don't call both `bedside-lamp.yaml` like I did. I overwrote the config of my first lamp with the second one and had to write it again.
 
 
 ## Step 3: Validate and compile
@@ -176,7 +165,7 @@ INFO Created: .../my-lamp/.esphome/build/bedside-lamp-left/build/firmware.ota.bi
 INFO Successfully compiled program.
 ```
 
-The firmware is ready. Now the hardware part.
+The firmware is ready. Now let's move to the hardware part.
 
 
 ## Step 4: Open the lamp
@@ -184,28 +173,30 @@ The firmware is ready. Now the hardware part.
 Remove the rubber pads in the bottom of the lamp. You don't need to remove them completely, only
 enough to see the 4 screws below.
 
-![TODO: photo of the bottom with rubber pads half removed](images/blog/02-rubber-pads.jpg)
+![photo of the bottom with rubber pads half removed](img/img_remove_screws.jpg)
 
 Unscrew the 4 screws and pull off the bottom. It needs a bit of force, just go slowly around until
 it comes loose. Then you will directly see the exposed PCB where we will connect.
 
-![TODO: photo of the PCB exposed](images/blog/04-pcb.jpg)
+![photo of the PCB exposed](img/img_open_lamp.jpg)
 
 
 ## Step 5: Solder the wires
 
 On the board there are small debug pads. You need 4 of them: `RX`, `TX`, `GND` and `GPIO0`.
 
-![TODO: close-up photo of the debug pads with labels](images/blog/05-debug-pads.jpg)
+![close-up photo of the debug pads with labels](img/img_pads.png)
 
 I cut dupont wires on one side, removed a bit of the plastic, put some solder on the wire and then
 soldered them to the pads. Don't use too much solder on `GPIO0`, the pad next to it is very close
 and if you connect both the lamp always stays in flash mode.
 
+![photo of the wires](img/img_cut_cables.jpg)
+
 Also **don't use the 3.3V pad** to power the board from the adapter. The lamp must always use its
 own power supply.
 
-![TODO: photo of the soldered wires](images/blog/06-soldered-wires.jpg)
+![photo of the soldered wires](img/img_soldered_wires.jpg)
 
 If you want to keep the wires for later, a bit of hot glue helps so they don't break off.
 
@@ -227,7 +218,7 @@ Yes, TX goes to RX and RX goes to TX. This is normal.
 `GPIO0` must be connected to GND **when the lamp starts**, this puts the ESP32 in flash mode. My
 adapter has only one GND pin, so I used a breadboard to connect the two GND wires together.
 
-![TODO: photo of the wiring with the breadboard](images/blog/07-wiring.jpg)
+![photo of the FTDI chip](img/img_ftdi.jpg)
 
 Keep the lamp power supply **unplugged** for now.
 
@@ -270,11 +261,6 @@ $ lsusb
 Bus 001 Device 018: ID 10c4:ea60 Silicon Labs CP210x UART Bridge
 ...
 ```
-
-Here's a funny story: with the first lamp, the adapter was not in `lsusb` at all. I lost some time
-before I understood my USB cable was a **charge only** cable, without data lines. With another
-cable it worked immediately. If you use a USB hub, also try plugging it directly into the computer.
-
 
 ## Step 9: Put the lamp in flash mode and test the connection
 
@@ -351,8 +337,7 @@ Hard resetting via RTS pin...
 INFO Successfully uploaded program.
 ```
 
-Only 14 seconds! The warning about the crystal frequency looked scary, but `Hash of data verified`
-means the firmware is written correctly, so I ignored it.
+Only 14 seconds! The message `Hash of data verified` means the firmware is written correctly.
 
 ## Step 12: First boot with ESPHome
 
@@ -371,7 +356,6 @@ INFO Successful handshake with bedside-lamp-left @ 192.168.30.231 in 0.895s
 [21:27:04.275][W][esp-idf:000]: E (37382) system_api: Base MAC address from BLK0 of EFUSE CRC error, efuse_crc = 0xbb; calc_crc = 0x7e
 [21:27:04.276][W][app:188]: Set flash_chip: generic under esp32 > framework > advanced to save IRAM
 [21:27:04.276][W][app:227]: Bootloader supports SRAM1 as IRAM (+40KB). Set sram1_as_iram: true under esp32 > framework > advanced
-^C
 ```
 
 It works! The three warnings are not a problem:
@@ -389,38 +373,14 @@ Wi-Fi:
 $ esphome run ./my-lamp/bedside-lamp-left.yaml --device OTA
 ```
 
-![TODO: photo of the lamp closed and working](images/blog/09-working.jpg)
+![photo of the lamp closed and working](images/blog/09-working.jpg)
 
 
 ## Step 13: Add it to Home Assistant
 
-In Home Assistant the lamp normally shows up by itself in **Settings → Devices & services** as a
-newly discovered ESPHome device. Click it, and when it asks, give the `api_encryption_key` from your
-`secrets.yaml`. Done!
+In Home Assistant the lamp normally shows up by itself as a newly discovered ESPHome device in **Settings → Devices & services** if you have the ESPHome integration. Click it, and when it asks, give the `api_encryption_key` from your `secrets.yaml`. If it doesn't appear, simply go to **Settings → Devices & services → Integrations**, navigate to the ESPHome integration (or add it if it's not there!) and select **Add Device**, then you can introduce the corresponding IP address that you copied in Step 12 and the api key as well.
 
-![TODO: screenshot of the lamp in Home Assistant](images/blog/10-home-assistant.png)
-
-### The lamp disappeared from Home Assistant
-
-With my first lamp I had a surprise. I added it to Home Assistant on my desk, then I put it in the
-bedroom, and after that Home Assistant could not find it anymore. When I tried to add it again, I
-got:
-
-```
-Unable to connect to the ESPHome device. Make sure the device's YAML configuration includes an `api` section.
-```
-
-But the `api` section was there! The problem was my network: on my desk the lamp had
-`192.168.30.115`, but in the bedroom it connected to another access point and got `192.168.10.115`,
-which is a different subnet. Home Assistant was not able to reach the new address, and mDNS
-(`.local` names) does not work between subnets.
-
-So this message from Home Assistant can also mean simply "I cannot reach the lamp". To check if
-the lamp itself is OK, run `esphome logs ... --device OTA` from a computer in the same network.
-
-The solution is to make sure the lamp always gets an IP in the same network as Home Assistant,
-and to give it a fixed address (DHCP reservation) in the router.
-
+![screenshot of the lamp in Home Assistant](img/img_lamp_ha.png)
 
 ## Troubleshooting (things that happened to me)
 
@@ -456,19 +416,6 @@ two fixed it.
 `esphome upload` only tries for a few seconds and then gives up with this error. Because the lamp
 stays in flash mode until you unplug it, it is easier to plug the lamp power first and then
 start the command.
-
-### `.local` names don't work on NixOS
-
-`ping bedside-lamp-left.local` did not work on my machine, but `esphome logs` found the lamp
-without problem because ESPHome has its own mDNS. If you want `.local` names everywhere, add this
-to your NixOS config:
-
-```nix
-services.avahi = {
-  enable = true;
-  nssmdns4 = true;
-};
-```
 
 
 ## How to go back to the original firmware
